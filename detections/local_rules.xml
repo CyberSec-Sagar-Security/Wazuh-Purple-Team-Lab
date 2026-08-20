@@ -1,0 +1,70 @@
+<!-- Local rules -->
+
+<!-- Modify it at your will. -->
+<!-- Copyright (C) 2015, Wazuh Inc. -->
+
+<!-- Example -->
+
+<group name="purple_lab_custom,">
+
+  <rule id="100010" level="0">
+    <if_sid>92213</if_sid>
+    <field name="win.eventdata.targetFilename" type="pcre2">(?i)PSScriptPolicyTest</field>
+    <field name="win.eventdata.image" type="pcre2">(?i)\\(powershell|pwsh)\.exe$</field>
+    <description>FP suppression: PSScriptPolicyTest is PowerShell's own AppLocker self-test file, not malware — only when created by the legitimate PowerShell binary</description>
+    <mitre>
+      <id>T1105</id>
+    </mitre>
+    <group>false_positive_tuning,</group>
+  </rule>
+
+  <rule id="100011" level="3">
+    <decoded_as>windows_eventchannel</decoded_as>
+    <field name="win.system.eventID">^1$</field>
+    <field name="win.eventdata.image" type="pcre2">(?i)\\(systeminfo|hostname|whoami|tasklist|nbtstat|ipconfig|qwinsta)\.exe$</field>
+    <description>Discovery: reconnaissance command executed (T1082) — informational visibility, single instance is common admin activity</description>
+    <mitre>
+      <id>T1082</id>
+    </mitre>
+    <group>discovery,attack_technique_T1082,</group>
+  </rule>
+
+  <rule id="100012" level="12">
+    <if_sid>92302</if_sid>
+    <description>Persistence: Registry Run key created via reg.exe — escalated from stock Low severity, this is a genuine persistence mechanism</description>
+    <mitre>
+      <id>T1547.001</id>
+    </mitre>
+    <group>persistence_escalated,</group>
+  </rule>
+
+</group>
+
+<group name="local,">
+
+  <rule id="100002" level="12">
+    <if_sid>61603</if_sid>
+    <field name="win.eventdata.image" type="pcre2">(?i)\\powershell\.exe$</field>
+    <field name="win.eventdata.commandLine" type="pcre2">(?i)(\-EncodedCommand|\-enc\s|\-ec\s)</field>
+    <description>T1059.001 - PowerShell encoded command execution detected</description>
+    <mitre>
+      <id>T1059.001</id>
+    </mitre>
+    <group>attack,execution,defense_evasion,</group>
+  </rule>
+
+
+  <rule id="100003" level="15">
+    <if_sid>61612</if_sid>
+    <field name="win.eventdata.targetImage" type="pcre2">(?i)\\lsass\.exe$</field>
+    <field name="win.eventdata.sourceImage" type="pcre2">(?i)\\rundll32\.exe$</field>
+    <description>T1003.001 - LSASS memory dump attempt via comsvcs.dll</description>
+    <mitre>
+      <id>T1003.001</id>
+    </mitre>
+    <group>attack,credential_access,</group>
+  </rule>
+
+</group>
+
+
