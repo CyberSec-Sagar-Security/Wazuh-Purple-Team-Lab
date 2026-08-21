@@ -104,8 +104,6 @@ Requires VMware Workstation/Player and 3 VMs: Ubuntu 24 (Wazuh manager, single-n
 
 **Sagar Suryawanshi**
 MSc Cybersecurity Student (Ireland) · AWS Certified Cloud Practitioner
-[LinkedIn](#) | [GitHub](#)
-
 ## License
 
 MIT
